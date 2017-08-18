@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "formatters": {
+    "simple": {
+      "format": "%(asctime)-15s\t%(levelname)s\t%(process)d\t%(name)s\t%(filename)s\t%(funcName)s\t%(lineno)d\t%(message)s"
+    }
+  },
+  "handlers": {
+    "console": {
+      "class": "logging.StreamHandler",
+      "level": "DEBUG",
+      "formatter": "simple"
+    },
+    "file": {
+      "class": "logging.FileHandler",
+      "filename": "/Users/lamter/workspace/OpenSource/importfut/tmp/logging.log",
+      "level": "DEBUG",
+      "formatter": "simple",
+      "mode": "w"
+    }
+  },
+  "loggers": {
+    "root": {
+      "handlers": [
+        "console",
+        "file"
+      ],
+      "level": "DEBUG"
+    }
+  }
+}
