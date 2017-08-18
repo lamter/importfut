@@ -63,7 +63,7 @@ class MainEngine(object):
                 # 保存数据
                 documents = df.to_dict('records')
                 self.collection.insert_many(documents)
-                print("{} 保存了 {} 条数据到mongodb".format(ob.symbol, df.shape[0]))
+                self.log.info("{} 保存了 {} 条数据到mongodb".format(ob.symbol, df.shape[0]))
                 count += df.shape[0]
                 time.sleep(1)
 
