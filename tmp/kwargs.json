@@ -1,0 +1,12 @@
+{
+  "futpath": "/Users/lamter/Documents/期货历史/金数源/金数源期货数据",
+  "mongoConf": {
+    "host": "localhost",
+    "port": 30020,
+    "dbn": "ctp",
+    "collection": "bar_1min_bak",
+    "username": "vnpy",
+    "password": "vnpy"
+  }
+
+}
