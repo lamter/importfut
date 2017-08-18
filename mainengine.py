@@ -2,6 +2,7 @@ import os
 import logging.config
 import logging
 from bson.codec_options import CodecOptions
+import time
 
 import pymongo
 import pandas as pd
@@ -62,10 +63,10 @@ class MainEngine(object):
                 # 保存数据
                 documents = df.to_dict('records')
                 self.collection.insert_many(documents)
-                print("{} 保存了 {} 条数据到mongodb".format(ob.symbol, df.shape[0]))
                 count += df.shape[0]
+                time.sleep(1)
 
-        print('累积保存了 {} 条数据'.format(count))
+            self.log.info('year {} 累积保存了 {} 条数据'.format(year, count))
 
     def dbConnect(self):
         mongoConf = self.mongoConf
