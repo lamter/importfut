@@ -38,6 +38,9 @@ class MainEngine(object):
         # 加载文件路径
         self.loaddir()
 
+        self.log.warning('10秒后开始导入数据!!!')
+        time.sleep(10)
+
     def start(self):
         """
 
@@ -118,6 +121,9 @@ class MainEngine(object):
                 # if __debug__:
                 #     self.log.warning('只取一个文件 {}'.format(ob.symbol))
                 #     return
+
+        self.log.info('即将导入年份 {}'.format(str(list(self.path.keys()))))
+
 
     def getBarDf(self, ob):
         df = pd.read_csv(ob.path, encoding='GB18030')
