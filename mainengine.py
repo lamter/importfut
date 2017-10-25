@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import os
 import logging.config
 import logging
@@ -23,7 +24,7 @@ class MainEngine(object):
 
         self.mongoConf = mongoConf
         self.futpath = futpath
-        self.path = {}  # 原始 CSV 数据的路径
+        self.path = OrderedDict()  # 原始 CSV 数据的路径
 
         self.collection = None
 
@@ -98,9 +99,8 @@ class MainEngine(object):
         """
         root, dirs, files = next(os.walk(self.futpath))
 
-        dirs.sort(reverse=True)
+        dirs.sort()
         for yearDir in dirs:
-
             year = yearDir[-4:]  # 年份
             yearDirPath = os.path.join(root, yearDir)  # 文件按年打包
             yearDirPath, dirs, files = next(os.walk(yearDirPath))
