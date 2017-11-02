@@ -100,7 +100,7 @@ if __name__ == '__main__':
         logConfig = json.load(f)
 
     startDate = arrow.get('2017-11-01 00:00:00+08:00').datetime
-    # endDate = arrow.get('2017-08-31 00:00:00+08:00').datetime
+    endDate = arrow.get('2011-01-01 00:00:00+08:00').datetime
     endDate = None
     mainEngine = Mover(startDate=startDate, endDate=endDate,**kwargs)
     mainEngine.init()
