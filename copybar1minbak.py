@@ -101,7 +101,6 @@ if __name__ == '__main__':
 
     startDate = arrow.get('2017-11-02 00:00:00+08:00').datetime
     endDate = arrow.get('2011-01-01 00:00:00+08:00').datetime
-    endDate = None
     mainEngine = Mover(startDate=startDate, endDate=endDate,**kwargs)
     mainEngine.init()
     mainEngine.start()
