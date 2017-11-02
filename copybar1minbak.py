@@ -67,12 +67,12 @@ class Mover(object):
                 count += 1
                 amount += 1
                 documents.append(d)
-                if count > 10000:
+                if count > 3000:
                     print(amount)
                     self.targetCol.insert_many(documents)
                     count = 0
                     documents = []
-                    time.sleep(1)
+                    time.sleep(0.1)
             if documents:
                 print(amount)
                 self.targetCol.insert_many(documents)
