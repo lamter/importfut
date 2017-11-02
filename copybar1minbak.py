@@ -17,22 +17,20 @@ class Mover(object):
 
     """
 
-    def __init__(self, mongoConf, startDate):
+    def __init__(self, mongoConf, startDate, endDate=None):
         self.mongoConf = mongoConf
-        if "+08:00" not in startDate:
-            raise ValueError('没有指定时区 +08:00')
-        self.startDate = arrow.get(startDate).datetime
+        self.startDate = startDate
         now = datetime.datetime.now()
-        self.endDate = arrow.get(now.strftime('%Y-%m-%d 00:00:00+08:00'))
+        self.endDate = endDate or arrow.get(now.strftime('%Y-%m-%d 00:00:00+08:00'))
 
         # 本地collection
-        self.localCol = None
+        self.targetCol = None
         # 远程 collection
-        self.remoteCol = None
+        self.sourceCol = None
 
     def dbConnect(self):
-        self.localCol = self._initMongo(self.mongoConf['localMongo'])
-        self.remoteCol = self._initMongo(self.mongoConf['remoteMongo'])
+        self.targetCol = self._initMongo(self.mongoConf['targetMongo'])
+        self.sourceCol = self._initMongo(self.mongoConf['sourceMongo'])
 
     def _initMongo(self, conf):
         client = pymongo.MongoClient(
@@ -58,24 +56,26 @@ class Mover(object):
             sql = {
                 'tradingDay': dt,
             }
-            cursor = self.remoteCol.find(sql, {'_id': 0})
+            cursor = self.sourceCol.find(sql, {'_id': 0})
             count = 0
             documents = []
             amount = 0
+
+
             for d in cursor:
                 count += 1
                 amount += 1
                 documents.append(d)
-                if count > 1000:
+                if count > 10000:
                     print(amount)
-                    self.localCol.insert_many(documents)
+                    self.targetCol.insert_many(documents)
                     count = 0
                     documents = []
                     time.sleep(1)
             if documents:
                 print(amount)
-                self.localCol.insert_many(documents)
-                time.sleep(1)
+                self.targetCol.insert_many(documents)
+                time.sleep(0.1)
 
 
             dt += datetime.timedelta(days=1)
@@ -98,6 +98,9 @@ if __name__ == '__main__':
     with open(loggingConfigFile, 'r') as f:
         logConfig = json.load(f)
 
-    mainEngine = Mover(**kwargs)
+    startDate = arrow.get('2011-01-01 00:00:00+08:00').datetime
+    # endDate = arrow.get('2017-08-31 00:00:00+08:00').datetime
+    endDate = None
+    mainEngine = Mover(startDate=startDate, endDate=endDate,**kwargs)
     mainEngine.init()
     mainEngine.start()
