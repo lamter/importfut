@@ -17,11 +17,12 @@ class Mover(object):
 
     """
 
-    def __init__(self, mongoConf, startDate, endDate=None):
+    def __init__(self, mongoConf, startDate, endDate):
         self.mongoConf = mongoConf
         self.startDate = startDate
-        now = datetime.datetime.now()
-        self.endDate = endDate or arrow.get(now.strftime('%Y-%m-%d 00:00:00+08:00'))
+        self.endDate = endDate
+        if self.startDate < self.endDate:
+            raise ValueError(u'startDate 应该当大于 endDate')
 
         # 本地collection
         self.targetCol = None
@@ -51,7 +52,7 @@ class Mover(object):
 
     def start(self):
         dt = self.startDate
-        while dt <= self.endDate:
+        while dt >= self.endDate:
             print(dt)
             sql = {
                 'tradingDay': dt,
@@ -78,7 +79,7 @@ class Mover(object):
                 time.sleep(0.1)
 
 
-            dt += datetime.timedelta(days=1)
+            dt -= datetime.timedelta(days=1)
 
 if __name__ == '__main__':
     settingFile = 'conf/copy.json'
@@ -98,7 +99,7 @@ if __name__ == '__main__':
     with open(loggingConfigFile, 'r') as f:
         logConfig = json.load(f)
 
-    startDate = arrow.get('2011-01-01 00:00:00+08:00').datetime
+    startDate = arrow.get('2017-11-01 00:00:00+08:00').datetime
     # endDate = arrow.get('2017-08-31 00:00:00+08:00').datetime
     endDate = None
     mainEngine = Mover(startDate=startDate, endDate=endDate,**kwargs)
